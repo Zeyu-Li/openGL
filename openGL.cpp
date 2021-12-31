@@ -2,22 +2,54 @@
 //
 
 #include <iostream>
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+typedef long long ll;
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    // init function
+    glfwInit();
+
+    // config inits
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // window height and width set to the same at 800px
+    int height, width;
+    height = width = 800;
+    const char* windowName = "OpenGL - Test";
+    bool fullscreen = false;
+
+    // window object
+    GLFWwindow* window = glfwCreateWindow(height, width, windowName, NULL, NULL);
+
+    // if window could not be initalized
+    if (!window) {
+        std::cout << "Could not load window :(\n";
+        glfwTerminate();
+        return -1;
+    }
+
+    // create window instance
+    glfwMakeContextCurrent(window);
+
+    // main while loop
+    while (!glfwWindowShouldClose(window)) {
+        // runner
+        glfwPollEvents();
+    }
+
+    // clean up
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    // std::cout << "Done\n";
     return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
