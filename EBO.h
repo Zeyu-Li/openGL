@@ -3,8 +3,7 @@
 
 #include<glad/glad.h>
 
-class EBO
-{
+class EBO {
 public:
 	// ID reference of Elements Buffer Object
 	GLuint ID;
