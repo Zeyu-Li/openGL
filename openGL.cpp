@@ -29,9 +29,12 @@ GLfloat vertices[] =
 // Indices for vertices order
 GLuint indices[] =
 {
-    0, 3, 5, // Lower left triangle
-    3, 2, 4, // Lower right triangle
-    5, 4, 1 // Upper triangle
+    0, 1, 2,
+    0, 2, 3,
+    0, 1, 4,
+    1, 2, 4,
+    2, 3, 4,
+    3, 0, 4
 };
 
 int main()
