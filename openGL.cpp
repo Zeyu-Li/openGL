@@ -5,6 +5,9 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "ShaderClass.h"
 #include "VAO.h"
@@ -13,14 +16,14 @@
 
 typedef long long ll;
 // Vertices coordinates
+// in the shape of the 3 coordinates xyz then the colors
 GLfloat vertices[] =
 {
-    -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, 0.9f, 0.9f, 0.09f, // Lower left corner
-    0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, 0.5f, 0.9f, 0.09f, // Lower right corner
-    0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, 0.5f, 0.9f, 0.09f, // Upper corner
-    -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, 0.9f, 0.9f, 0.09f, // Inner left
-    0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, 0.9f, 0.9f, 0.09f, // Inner right
-    0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f, 0.9f, 0.5f, 0.09f // Inner down
+    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,
+    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,
+     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,
+     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f
 };
 
 // Indices for vertices order
@@ -86,19 +89,59 @@ int main()
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
+    // Gets ID of uniform called "scale"
+    GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+    // timer
+    float rotation = 0.0f;
+    double prevTime = glfwGetTime();
+
+    // let OpenGL handle depth renders
+    glEnable(GL_DEPTH_TEST);
 
     // main while loop
     while (!glfwWindowShouldClose(window)) {
         // clear for every frame
         glClearColor(0.18f, 0.18f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // run shader
         shaderProgram.Activate();
+
+        // run 3D renderer
+        // create identity matrix for all transforms
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 proj = glm::mat4(1.0f);
+
+        // time calculations
+        double currTime = glfwGetTime();
+        if (currTime - prevTime >= 1 / 60) {
+            rotation += 0.5f;
+            prevTime = currTime;
+        }
+
+        // spin
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+
+        view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+        // camaera renders at a 45 degree angle for objects from 0.1 to 100 units away
+        proj = glm::perspective(glm::radians(45.0f), (float)(width/height), 0.1f, 100.0f);
+
+        // Outputs the matrices into the Vertex Shader
+        int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+        // Assigns a value to the uniform; NOTE: Must always be done after activating the Shader Program
+        glUniform1f(uniID, 0.5f);
         // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
         // Draw primitives, number of indices, datatype of indices, index of indices
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         // swap the buffers on each run
         glfwSwapBuffers(window);
 
