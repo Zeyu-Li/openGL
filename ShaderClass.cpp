@@ -15,7 +15,7 @@ std::string get_file_contents(const char* filename) {
 	throw(errno);
 }
 
-// Constructor that build the Shader Program from 2 different shaders
+// Constructor that build the Shader Program for the 2 different shaders, vertx and frag
 Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	// Read vertexFile and fragmentFile and store the strings
 	std::string vertexCode = get_file_contents(vertexFile);
