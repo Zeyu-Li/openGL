@@ -1,4 +1,6 @@
 // openGL.cpp : This file contains the 'main' function. Program execution begins and ends there.
+#include<filesystem>
+namespace fs = std::filesystem;
 
 #include <iostream>
 #include <string>
@@ -98,7 +100,10 @@ int main()
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
     // Texture
-    Texture obamiumTexture("obamiumTexture.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    std::string textureFileName = "/openGL/obamiumTexture.png";
+    std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+    std::cout << (parentDir + textureFileName).c_str() << std::endl;
+    Texture obamiumTexture((parentDir + textureFileName).c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     obamiumTexture.texUnit(shaderProgram, "tex0", 0);
 
     // timer
