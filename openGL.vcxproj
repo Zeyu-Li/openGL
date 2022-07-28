@@ -72,16 +72,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\zeyul\Documents\GitHub\openGL\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\zeyul\Documents\GitHub\openGL\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\zeyul\Documents\GitHub\_games\openGL\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\zeyul\Documents\GitHub\_games\openGL\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\zeyul\Documents\GitHub\openGL\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\zeyul\Documents\GitHub\openGL\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\zeyul\Documents\GitHub\_games\openGL\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\zeyul\Documents\GitHub\_games\openGL\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,6 +149,8 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="openGL.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
+    <ClCompile Include="stb.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
@@ -161,8 +163,12 @@
   <ItemGroup>
     <ClInclude Include="EBO.h" />
     <ClInclude Include="ShaderClass.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="obamiumTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,4 @@
 // openGL.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include <iostream>
 #include <string>
@@ -8,7 +7,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <stb/stb_image.h>
 
+#include "Texture.h"
 #include "ShaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
@@ -19,11 +20,11 @@ typedef long long ll;
 // in the shape of the 3 coordinates xyz then the colors
 GLfloat vertices[] =
 {
-    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,
-    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,
-     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,
-     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,
-     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f
+    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
 };
 
 // Indices for vertices order
@@ -86,8 +87,9 @@ int main()
     EBO EBO1(indices, sizeof(indices));
 
     // Links VBO to VAO
-    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-    VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+    VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     // Unbind all to prevent accidentally modifying them
     VAO1.Unbind();
     VBO1.Unbind();
@@ -95,9 +97,14 @@ int main()
     // Gets ID of uniform called "scale"
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
+    // Texture
+    Texture obamiumTexture("obamiumTexture.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    obamiumTexture.texUnit(shaderProgram, "tex0", 0);
+
     // timer
     float rotation = 0.0f;
     double prevTime = glfwGetTime();
+
 
     // let OpenGL handle depth renders
     glEnable(GL_DEPTH_TEST);
@@ -141,6 +148,8 @@ int main()
 
         // Assigns a value to the uniform; NOTE: Must always be done after activating the Shader Program
         glUniform1f(uniID, 0.5f);
+        // binds texture
+        obamiumTexture.Bind();
         // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
         // Draw primitives, number of indices, datatype of indices, index of indices
@@ -157,6 +166,7 @@ int main()
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
+    obamiumTexture.Delete();
     shaderProgram.Delete();
     // window instance
     glfwDestroyWindow(window);
