@@ -100,10 +100,7 @@ int main()
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
     // Texture
-    std::string textureFileName = "/openGL/obamiumTexture.png";
-    std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
-    std::cout << (parentDir + textureFileName).c_str() << std::endl;
-    Texture obamiumTexture((parentDir + textureFileName).c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    Texture obamiumTexture("obamiumTexture.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     obamiumTexture.texUnit(shaderProgram, "tex0", 0);
 
     // timer
